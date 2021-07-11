@@ -1,0 +1,74 @@
+.login{
+    max-width: 800px;
+    min-height: 500px;
+    display: flex;
+    margin-top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 100px;
+    background-color:white;
+    border-radius: 10px;
+    height: fit-content;
+    padding:5px 15px;
+}
+.login:hover{
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+}
+
+.login_img{
+    width: 100%;
+}
+.image{
+    width: 100%;
+    margin-top: 100px;
+}
+
+.inp_form{
+    width: 100%;
+}
+.heading{
+    margin-left: 100px;
+    margin-top: 20px;
+    margin-bottom: 50px;
+}
+.inp-grp{
+    border-bottom: 2px solid black;
+    margin: 5px;
+    padding-left: 5px;
+    display: flex;
+}
+.icon{
+    margin-top: 10px;
+}
+*:focus {
+    outline: none;
+}
+.button{
+    background-color: #9FA9F7;
+    padding: 5px 10px;
+    border: 2px solid #6271e4;
+    border-radius: 5px;
+    margin: 10px auto;
+    color: rgb(35, 35, 36);
+}
+.login_reg{
+    margin-left: 100px;
+    margin-top: 30px;
+}
+
+@media only screen and (max-width: 600px) {
+    .login{
+        max-width: 600px;
+        min-height: 500px;
+        display: flex;
+        flex-direction: column;
+        margin-top: 100px;
+        margin-left: auto;
+        margin-right: auto;
+        background-color:white;
+        border-radius: 10px;
+        height: fit-content;
+        padding: 5px;
+        
+    }
+}
