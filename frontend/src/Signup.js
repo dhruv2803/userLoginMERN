@@ -24,7 +24,7 @@ function Signup() {
             const rep = await fetch(url)
             const repJson = await rep.json()
             if(repJson[0].Status==="Success"){
-                console.log( {city:repJson[0].PostOffice[0].District,state:repJson[0].PostOffice[0].State,country:repJson[0].PostOffice[0].Country})
+                // console.log( {city:repJson[0].PostOffice[0].District,state:repJson[0].PostOffice[0].State,country:repJson[0].PostOffice[0].Country})
                 let city=repJson[0].PostOffice[0].District
                 let state=repJson[0].PostOffice[0].State
                 let country=repJson[0].PostOffice[0].Country
@@ -43,19 +43,19 @@ function Signup() {
         return re.test(email);
     }
 
-    const sendOtp = async(e)=>{
-        e.preventDefault();
-        if(!validateEmail(email)){
-            window.alert("please type proper email")
-            return;
-        }
-        const res = await Auth(email);
-        // console.log(res);
-        // console.log(res.mail);
-        // console.log(res.OTP);
-        // console.log(res.success);
-        setOtp(res.OTP);
-      }
+    // const sendOtp = async(e)=>{
+    //     e.preventDefault();
+    //     if(!validateEmail(email)){
+    //         window.alert("please type proper email")
+    //         return;
+    //     }
+    //     const res = await Auth(email);
+    //     // console.log(res);
+    //     // console.log(res.mail);
+    //     // console.log(res.OTP);
+    //     // console.log(res.success);
+    //     setOtp(res.OTP);
+    //   }
     let name,value
     function handleInps(e){
         name = e.target.name
@@ -69,7 +69,10 @@ function Signup() {
         
         e.preventDefault();
         // console.log(user)
-        if (otp!=user.otp) {
+        if (!validateEmail(email)) {
+            window.alert("invalid email")
+        }
+        else if (otp!=user.otp) {
             window.alert("invalid otp")
         }
         else{
@@ -98,6 +101,23 @@ function Signup() {
         }
     } 
 
+    const sendOtpMobile = async(e) =>{
+        e.preventDefault()
+        const res = await fetch('/getotp',{
+            method:"POST",
+            headers:{
+                "Content-Type" : "application/json"
+            },
+            body : JSON.stringify({
+                mobileno:user.mobileno
+            })
+        })
+        const data = await res.json()
+        // console.log(data.otp)
+        setOtp(data.otp)
+        // console.log({res:res});
+    }
+
     return (
         <>
             <div className="signup">
@@ -106,7 +126,7 @@ function Signup() {
                         <h2>Sign Up</h2>
                     </div>
                         <div className="otp_grp">
-                        <div className="inp-grp">
+                        {/* <div className="inp-grp">
                             <label htmlFor="email">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-envelope-fill icon" viewBox="0 0 16 16">
                                     <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757zm3.436-.586L16 11.801V4.697l-5.803 3.546z"/>
@@ -114,9 +134,18 @@ function Signup() {
                             </label>
                             <input type="email" name="email" id="email" placeholder="Email" autoComplete="off" onChange={(e)=>setEmail(e.target.value)} 
                             value={email} />
+                        </div> */}
+                        <div className="inp-grp">
+                            <label htmlFor="mobileno">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-telephone-fill icon" viewBox="0 0 16 16">
+                                    <path fillRule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/>
+                                </svg>
+                            </label>
+                            <input type="number" name="mobileno" id="mobileno" placeholder="Mobile Number" autoComplete="off" onChange={(e)=>handleInps(e)} 
+                            value={user.mobileno} />
                         </div>
                         <div className="inp-submit">
-                            <button className="button" onClick={sendOtp}>Generate otp</button>
+                            <button className="button" onClick={sendOtpMobile}>Generate otp</button>
                         </div>
                         <div className="inp-grp">
                             <label htmlFor="otp">
@@ -158,13 +187,13 @@ function Signup() {
                             value={user.lname} />
                         </div>
                         <div className="inp-grp">
-                            <label htmlFor="mobileno">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-telephone-fill icon" viewBox="0 0 16 16">
-                                    <path fillRule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/>
+                            <label htmlFor="email">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-envelope-fill icon" viewBox="0 0 16 16">
+                                    <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757zm3.436-.586L16 11.801V4.697l-5.803 3.546z"/>
                                 </svg>
                             </label>
-                            <input type="number" name="mobileno" id="mobileno" placeholder="Mobile Number" autoComplete="off" onChange={(e)=>handleInps(e)} 
-                            value={user.mobileno} />
+                            <input type="email" name="email" id="email" placeholder="Email" autoComplete="off" onChange={(e)=>setEmail(e.target.value)} 
+                            value={email} />
                         </div>
                         <div className="lable">
                             Enter date of Birth:

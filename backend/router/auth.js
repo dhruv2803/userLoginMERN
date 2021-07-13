@@ -2,9 +2,21 @@ const express = require('express')
 const User = require('../model/userSchema')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const fast2sms = require('fast-two-sms');
+
+
 const router = express.Router()
 require('../db/conn')
 
+function generateOTP() {
+          
+    var digits = '0123456789';
+    let OTP = '';
+    for (let i = 0; i < 6; i++ ) {
+        OTP += digits[Math.floor(Math.random() * 10)];
+    }
+    return OTP;
+}
 
 router.post('/register',async(req,res)=>{
     const {name,email,mobileno,password,cpassword,dob,education,address,pincode,city,state,country,photo} = req.body
@@ -61,6 +73,17 @@ router.post('/login',async(req,res)=>{
     }catch(err){
         console.log(err)
     }
+})
+
+
+router.post('/getotp', async(req,res)=>{
+    const {mobileno} = req.body
+    console.log('this is getotp')
+    const otp = generateOTP()
+    var options = {authorization : process.env.API_KEY , message : `your otp is ${otp}` ,  numbers : [mobileno]} 
+    const response =  fast2sms.sendMessage(options) 
+    console.log(response)
+    return res.status(200).json({otp:otp})
 })
 
 router.get('/logout',(req,res)=>{
